@@ -1,0 +1,126 @@
+<style>
+    body {
+        background: #7070d7;
+        display: grid;
+        justify-content: center;
+        align-content: center;
+        text-align: center;
+    }
+
+    input {
+        border: none;
+        margin-bottom: 20px;
+        height: 50px;
+        width: 300px;
+        text-align: center;
+        border-radius: 10px;
+        font-family: monospace;
+    }
+
+    h1 {
+        color: #fff;
+        font-family: monospace;
+    }
+
+    button {
+        border: none;
+        outline: none;
+        padding: 8px 30px;
+        background: #3838c1;
+        color: #fff;
+        font-family: monospace;
+        cursor: pointer;
+        border-radius: 10px;
+    }
+
+    .result {
+        color: #fff;
+        font-family: monospace;
+    }
+
+    div#score {
+        color: #fff;
+        font-size: 20px;
+        font-family: monospace;
+    }
+
+    div#record {
+        color: #fff;
+        font-size: 25px;
+        font-family: monospace;
+    }
+</style>
+
+<div id="record"></div>
+
+<div id="score"></div>
+
+<h1> Secret Number </h1>
+
+<input type="text" id="number" name="number" placeholder="type a number from 1 to 3">
+
+<button onclick="startGame()">Start Game</button>
+
+<div id="screen"></div>
+
+<script>
+
+    function is_numeric(str) {
+        return /^\d+$/.test(str);
+    }
+
+    var score = 0;
+
+    record = 0;
+
+    function startGame() {
+        
+        var numberofplayer = document.getElementById('number');
+
+        var screen = document.getElementById('screen');
+
+        var score_result = document.getElementById('score');
+
+        var record_result = document.getElementById('record');
+
+        if (numberofplayer.value > 3 || numberofplayer.value <= 0 || !is_numeric(numberofplayer.value)) {
+            alert("Invalid number");    
+            document.getElementById('number').value = "";
+            return false;
+        }
+
+        var secretNumber = Math.floor((Math.random() * 3) + 1);
+
+        if (numberofplayer.value == secretNumber) {
+            numberofplayer.style.border = "2px solid green";
+            screen.insertAdjacentHTML('beforeend', '<p class="result">You winner, the number is ' + secretNumber + '</p>');
+            window.setTimeout(function() {
+                numberofplayer.value = "";
+                numberofplayer.style.border = "none";
+                var x = document.getElementsByClassName("result");
+                for (var i = 0; i < x.length; i++) {
+                    x[i].style.display = "none";
+                }
+                score++;
+                score_result.innerHTML = "score: " + score;
+            }, Math.random() * 2000 + 1000);
+        } else {
+            numberofplayer.style.border = "2px solid red";
+            screen.insertAdjacentHTML('beforeend', '<p class="result">You lose, the number is ' + secretNumber + '</p>');
+            window.setTimeout(function() {
+                numberofplayer.value = "";
+                numberofplayer.style.border = "none";
+                var x = document.getElementsByClassName("result");
+                for (var i = 0; i < x.length; i++) {
+                    x[i].style.display = "none";
+                }
+                if (score > record) {
+                    record = score;
+                    record_result.innerHTML = "Record: " + record;
+                }
+                score = 0;
+                score_result.innerHTML = "Score: " + score;
+            }, Math.random() * 2000 + 1000);
+        }
+    }
+</script>
